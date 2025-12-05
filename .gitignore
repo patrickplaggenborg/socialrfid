@@ -1,0 +1,29 @@
+# Logs
+logs/
+*.log
+
+# Private config (sensitive data)
+# Note: Include config with placeholder, gitignore actual with real passwords
+private/config/database.php
+private/config/db.php
+
+# Editor files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.bak
+*.old
+
+# Generated files (don't belong in git)
+awstats/
+cache/
+
+# OS files
+Thumbs.db
+

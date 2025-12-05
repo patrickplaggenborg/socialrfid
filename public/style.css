@@ -1,0 +1,203 @@
+
+/* Begin Typography & Colors */
+body {
+	font-size: 62.5%; /* Resets 1em to 10px */
+	font-family: "Lucida Grande","Lucida Sans Unicode", Arial, Sans-Serif;
+	background-color: #fff6f0;
+	color: #000;
+	text-align: left;
+}
+
+#page {
+	margin: 0;
+	padding: 0 20px 20px 20px;
+	border: 0;
+	width: 990px;
+	}
+
+h1 {
+	position: relative;
+	background: url(images/socialrfid_title.jpg) no-repeat;
+	width: 886px;
+	height: 127px;
+}
+
+h1 span {
+	position: absolute;
+	top: -2000px;
+	left: -2000px
+}
+
+h2 {
+	font-size: 15px;
+	line-height: 19px;	
+}
+
+
+#example {
+	width: 700px;
+	float:left;
+	padding:0;
+	margin:0;
+//	border-top: 1px solid #eee;
+//	border-left: 1px solid #eee;
+//	border-right: 1px solid #ddd;
+//	border-bottom: 1px solid #ddd;
+}
+
+#cta {
+	float:left;	
+	width:260px;
+	height:350px;
+	padding:0;
+	margin:0;
+	font-size: 13px;
+	line-height:19px;
+}
+
+#cta h2 {
+	font-size: 12px;
+	font-weight: normal;
+	margin:0;
+	padding:0;
+}
+
+
+#cta h2 strong {
+	font-size: 18px;
+	font-weight: bold;
+	line-height:13px;
+}
+
+#thesiscta {
+	width: 198px;
+	padding-left:55px;
+	margin:0;
+}
+
+#thesiscta a {
+	display:block;
+	width: 195px;
+	height: 50px;
+	background: url(images/thesis-cta.jpg) no-repeat;
+	margin-top:6px;
+	padding: 32px 0 0 41px;
+	color: black;
+	font-weight:bold;
+	font-size: 16px;
+	text-decoration:none;
+}
+
+
+#thesiscta a:hover {
+	text-decoration:underline;
+}
+
+#arrowthesis {
+	background: url(images/arrow_thesis.gif) no-repeat;
+	width: 30px;
+	height: 43px;
+	position: absolute;
+	top: 123px;
+	left: 746px;
+}
+
+#arrowproject {
+	background: url(images/arrow_project.gif) no-repeat;
+	width: 34px;
+	height: 24px;
+	position: absolute;
+	top: 346px;
+	left: 738px;
+}
+
+#projectcta {
+	width: 240px;
+	padding-left:20px;
+	margin: 100px 0 0 0;
+}
+
+#projectcta a {
+	display:block;
+	width: 161px;
+	height: 52px;
+	background: url(images/interviews.png) no-repeat;
+	margin-top:6px;
+	padding: 12px 0 0 80px;
+	color: black;
+	font-size:12px;
+	text-decoration:none;
+}
+
+#projectcta a strong {
+	font-weight:bold;
+	text-decoration:underline;
+	color:#17b402;
+}
+
+.column {
+	margin: 20px;
+	margin-top:40px;
+	padding: 20px;
+	width: 200px;
+	background-color: #fff;
+	float: left;
+	border-top: 1px solid #eee;
+	border-left: 1px solid #eee;
+	border-right: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	}
+#technical {
+	float: left;
+	margin: 30px;
+}
+
+a.thesisbutton {
+	display:block;
+	width: 171	px;
+	height: 82px;
+	background: url(images/thesis-cover-small.jpg) no-repeat;
+	margin-top:6px;
+	padding: 122px 0 0 35px;
+	color: black;
+	font-weight:bold;
+	font-size: 16px;
+	text-decoration:none;
+}
+
+
+a:hover.thesisbutton {
+	text-decoration:underline;
+}
+
+
+
+
+p#author {
+	font-size: 120%;
+}
+
+p#author a {
+	background: url(images/linkedin_button.png) no-repeat right;
+	padding-right: 22px;
+}
+
+#about {
+	border-top: 1px solid #ddd;
+	padding: 4px 0 0 0;
+	margin: 20px 0 0 0;
+}
+
+#about p {
+	background: url(images/patrick.png) no-repeat;
+	padding-left: 58px;
+	height: 54px;
+	line-height: 15px;	
+}
+
+#lbilostboys {
+	border: 0;
+	position: relative;
+	top: 2px;
+	margin: -2px 0 0 2px;
+}
