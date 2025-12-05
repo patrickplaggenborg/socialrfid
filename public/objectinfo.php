@@ -1,4 +1,8 @@
 <?php
+// Disable error display, log errors instead
+ini_set('display_errors', 0);
+ini_set('log_errors', true);
+
 // Set object unique code
 if ( ($_GET['object']!='') && (preg_match('/^(thing:)?[a-zA-Z0-9]+$/', $_GET['object'],$match)) )
 {
@@ -8,16 +12,28 @@ else
 {
 	unset($object);
 }
+
+// Exit early if no valid object code
+if (!isset($object)) {
+	error_log('Invalid or missing object parameter');
+	http_response_code(400);
+	exit(0);
+}
+
 // Make Database connection
 require_once('../private/config/system_database.php');
-// Get object info
-// get categories
-$object_result = mysqli_query($conn,"
-					SELECT uc,db
-					FROM srfid_objects
-					WHERE uc='".$object."'
-					LIMIT 1
-					");
+
+// Get object info using prepared statement
+$stmt = mysqli_prepare($conn, "SELECT uc, db FROM srfid_objects WHERE uc = ? LIMIT 1");
+if (!$stmt) {
+	error_log("Prepare failed: " . mysqli_error($conn));
+	http_response_code(500);
+	exit(0);
+}
+
+mysqli_stmt_bind_param($stmt, "s", $object);
+mysqli_stmt_execute($stmt);
+$object_result = mysqli_stmt_get_result($stmt);
 $object_result_count = mysqli_num_rows($object_result);
 if ($object_result_count==1)
 {
@@ -28,13 +44,14 @@ if ($object_result_count==1)
 	{
 		header ("Content-type: application/xml");
 	}
-	// Set encoding
-	echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
+	// Set encoding to UTF-8
+	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	
 	// get object database and unique code
 	$object = mysqli_fetch_array($object_result);
 	
-	// set id database
+	// Validate table name to prevent SQL injection
+	$dbname = '';
 	if ($object['db']==1)
 	{
 		// database is EPC Global
@@ -43,17 +60,35 @@ if ($object_result_count==1)
 		// database is Thinglink
 		$dbname = 'srfid_thing';
 	}
+	
+	if (empty($dbname)) {
+		error_log('Invalid database type: ' . $object['db']);
+		http_response_code(500);
+		exit(0);
+	}
+	
+	// Escape table name (whitelist approach)
+	$allowed_tables = ['srfid_epc', 'srfid_thing'];
+	if (!in_array($dbname, $allowed_tables)) {
+		error_log('Invalid table name: ' . $dbname);
+		http_response_code(500);
+		exit(0);
+	}
 ?>
 	<object>
-		<db><?=$object['db'];?></db>
+		<db><?=htmlspecialchars($object['db'], ENT_XML1, 'UTF-8');?></db>
 <?php
-	// get object data
-	$objectdata_result = mysqli_query($conn,"
-		SELECT *
-		FROM ".$dbname."
-		WHERE uc='".$object['uc']."'
-		LIMIT 1
-		");
+	// get object data using prepared statement
+	$stmt2 = mysqli_prepare($conn, "SELECT * FROM `$dbname` WHERE uc = ? LIMIT 1");
+	if (!$stmt2) {
+		error_log("Prepare failed: " . mysqli_error($conn));
+		http_response_code(500);
+		exit(0);
+	}
+	
+	mysqli_stmt_bind_param($stmt2, "s", $object['uc']);
+	mysqli_stmt_execute($stmt2);
+	$objectdata_result = mysqli_stmt_get_result($stmt2);
 	$objectdata_result_count = mysqli_num_rows($objectdata_result);
 
 	if ($objectdata_result_count==1)
@@ -88,17 +123,22 @@ if ($object_result_count==1)
 			    $sec = substr($timestamp, 12, 2);
 			    $fr = date("dS \of F Y", mktime($hour, $min, $sec, $month, $day, $year));
 			}
-			echo '<'.$fn->name.'>'.$fr.'</'.$fn->name.'>';
+			echo '<'.$fn->name.'>'.htmlspecialchars($fr, ENT_XML1, 'UTF-8').'</'.$fn->name.'>';
 		}		
 	}
 
 
-	// get object stories
-	$story_result = mysqli_query($conn,"
-		SELECT filename
-		FROM srfid_stories
-		WHERE uc='".$object['uc']."'
-		");
+	// get object stories using prepared statement
+	$stmt3 = mysqli_prepare($conn, "SELECT filename FROM srfid_stories WHERE uc = ?");
+	if (!$stmt3) {
+		error_log("Prepare failed: " . mysqli_error($conn));
+		http_response_code(500);
+		exit(0);
+	}
+	
+	mysqli_stmt_bind_param($stmt3, "s", $object['uc']);
+	mysqli_stmt_execute($stmt3);
+	$story_result = mysqli_stmt_get_result($stmt3);
 	$story_result_count = mysqli_num_rows($story_result);
 
 	if ($story_result_count>0)
@@ -110,7 +150,7 @@ if ($object_result_count==1)
 		{
 			$story = mysqli_fetch_assoc($story_result);
 			
-			echo '<story>'.$story[filename].'</story>';			
+			echo '<story>'.htmlspecialchars($story['filename'], ENT_XML1, 'UTF-8').'</story>';			
 		}
 		echo '</stories>';	}
 ?>
